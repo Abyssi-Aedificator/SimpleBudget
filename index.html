@@ -2668,6 +2668,8 @@
           <div class="cl-list">
             <div class="cl-entry"><span class="cl-tag new">New</span><div class="cl-entry-text"><strong>Credit accounts show available credit</strong> &mdash; Credit accounts with a credit limit set now display remaining available credit (limit minus what's owed) instead of the raw negative balance, in the account list, the dashboard balance chips, and the Upcoming forecast (totals, per-item running balance, warnings, and chart).</div></div>
             <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Upcoming starting balance ignored the rest of the current month</strong> &mdash; switching the Upcoming window to &ldquo;Next month&rdquo; showed today's balance as the starting point, skipping over the remaining transactions and recurring charges still due before month end. The starting (and ending) balance now folds in everything between today and the start of the selected window.</div></div>
+            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Editing a budget retroactively changed past months</strong> &mdash; changing a recurring budget's amount, category, type, or recurring-inclusion in any month used to rewrite that value for every month the budget covered, past included. Edits now only take effect from the selected month onward; earlier months keep their original values.</div></div>
+            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Budget spent exactly to the limit showed as Overspent</strong> &mdash; a budget where spending exactly equalled the budgeted amount (e.g. $269.09 spent on a $269.09 budget) could show &ldquo;Overspent&rdquo; instead of &ldquo;Maxed&rdquo; due to floating-point rounding from summed transaction amounts. The comparison now rounds to the cent first.</div></div>
           </div>
         </div>
       </div>
@@ -8094,7 +8096,9 @@ function confirmCancel() {
 const WHATS_NEW_ENTRIES = {
 "beta 0.9.0": [
     { type: "new", title: "Credit accounts show available credit", desc: "Credit accounts with a credit limit set now display remaining available credit (limit minus what's owed) instead of the raw negative balance — in the account list, dashboard balance chips, and the Upcoming forecast (totals, per-item running balance, warnings, and chart)." },
-    { type: "fix", title: "Upcoming starting balance ignored the rest of the current month", desc: "Switching the Upcoming window to \"Next month\" showed today's balance as the starting point, skipping over the remaining transactions and recurring charges still due before month end. The starting (and ending) balance now folds in everything between today and the start of the selected window." }
+    { type: "fix", title: "Upcoming starting balance ignored the rest of the current month", desc: "Switching the Upcoming window to \"Next month\" showed today's balance as the starting point, skipping over the remaining transactions and recurring charges still due before month end. The starting (and ending) balance now folds in everything between today and the start of the selected window." },
+    { type: "fix", title: "Editing a budget retroactively changed past months", desc: "Changing a recurring budget's amount, category, type, or recurring-inclusion in any month used to rewrite that value for every month the budget covered, past included. Edits now only take effect from the selected month onward; earlier months keep their original values." },
+    { type: "fix", title: "Budget spent exactly to the limit showed as Overspent", desc: "A budget where spending exactly equalled the budgeted amount (e.g. $269.09 spent on a $269.09 budget) could show \"Overspent\" instead of \"Maxed\" due to floating-point rounding from summed transaction amounts. The comparison now rounds to the cent first." }
   ],
 "beta 0.8.6": [
     { type: "change", title: "Unconfirmed recurring transactions excluded from balances", desc: "Auto-generated recurring transactions not yet matched to a real bank import (recurring rule only) no longer count toward account balances or the Total. They are treated as projections until confirmed, so balances reflect money that actually moved. They stay visible in the transaction list and Upcoming forecast." }
@@ -8303,7 +8307,8 @@ function submitBudgetForm(e) {
 
   const inclRec = document.getElementById("plan-f-recurring").checked;
   if (id) {
-    const entry = state.planification.find(p => p.id === id);
+    const planMonth = document.getElementById("plan-month")?.value || "";
+    const entry = planEntryForward(id, planMonth);
     if (entry) { entry.categoryName = cat; entry.type = type; entry.amount = amount; entry.includeRecurring = inclRec; }
   } else {
     const planMonth = document.getElementById("plan-month")?.value || "";
@@ -8313,6 +8318,34 @@ function submitBudgetForm(e) {
   editingPlanId = null;
   closeAddBudget();
   renderPlanification();
+}
+
+// Returns the planification entry to mutate so a change takes effect from `month` onward
+// without altering prior months: if the entry already starts at/after `month`, edit it in
+// place; otherwise cap the original at the previous month and fork a new entry starting at
+// `month` that carries the original's fields and any skip months/end month from `month` on.
+function planEntryForward(id, month) {
+  const entry = state.planification.find(p => p.id === id);
+  if (!entry) return null;
+  if (!entry.startMonth || entry.startMonth >= month) return entry;
+
+  const skip = entry.skipMonths || [];
+  entry.skipMonths = skip.filter(m => m < month);
+  const carriedEnd = entry.endMonth;
+  entry.endMonth = prevMonth(month);
+
+  const forked = {
+    id: "plan-" + Date.now() + Math.random().toString(36).slice(2, 7),
+    categoryName: entry.categoryName,
+    type: entry.type,
+    amount: entry.amount,
+    includeRecurring: entry.includeRecurring,
+    startMonth: month,
+    skipMonths: skip.filter(m => m >= month)
+  };
+  if (carriedEnd) forked.endMonth = carriedEnd;
+  state.planification.push(forked);
+  return forked;
 }
 
 function editBudgetEntry(id) {
@@ -8335,7 +8368,8 @@ function submitPlanInlineEdit(id) {
   if (!el) return;
   const amount = parseFloat(el.value);
   if (isNaN(amount) || amount < 0) return;
-  const entry = state.planification.find(p => p.id === id);
+  const month = document.getElementById('plan-month')?.value || '';
+  const entry = planEntryForward(id, month);
   if (entry) entry.amount = amount;
   saveState();
   editingPlanId = null;
@@ -8413,7 +8447,8 @@ function closePlanDropdown() {
 }
 
 function setPlanRecurring(id, val) {
-  var entry = state.planification.find(function(p) { return p.id === id; });
+  var month = document.getElementById('plan-month')?.value || '';
+  var entry = planEntryForward(id, month);
   if (!entry) return;
   entry.includeRecurring = val;
   saveState();
@@ -8571,7 +8606,9 @@ function renderPlanification() {
     }
     var budget = entry.amount;
     var pct = budget > 0 ? Math.round((spent / budget) * 100) : 0;
-    var isOver = spent > budget;
+    // Compare in cents to avoid floating-point drift from summed transaction amounts
+    // making an exactly-maxed budget (spent === budget) register as overspent.
+    var isOver = Math.round(spent * 100) > Math.round(budget * 100);
     var available = Math.abs(budget - spent);
     var barWidth = Math.min(pct, 100);
     var catColor = categoryColor(entry.categoryName, type);
