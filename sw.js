@@ -9,7 +9,7 @@
  *     opens when the server/internet is gone.
  *   - Other files (manifest, icons): cache-first.
  */
-const CACHE = "simplebudget-v1";
+const CACHE = "simplebudget-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -48,7 +48,7 @@ self.addEventListener("fetch", function (event) {
       fetch(req)
         .then(function (res) {
           var copy = res.clone();
-          caches.open(CACHE).then(function (c) { c.put("./index.html", copy); });
+          caches.open(CACHE).then(function (c) { c.put("./index.html", copy); }).catch(function(){});
           return res;
         })
         .catch(function () {
@@ -65,9 +65,9 @@ self.addEventListener("fetch", function (event) {
     caches.match(req).then(function (cached) {
       return cached || fetch(req).then(function (res) {
         var copy = res.clone();
-        caches.open(CACHE).then(function (c) { c.put(req, copy); });
+        caches.open(CACHE).then(function (c) { c.put(req, copy); }).catch(function(){});
         return res;
-      }).catch(function () { return cached; });
+      }).catch(function () { return new Response("Offline", { status: 504 }); });
     })
   );
 });
