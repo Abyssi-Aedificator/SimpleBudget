@@ -65,7 +65,7 @@
   .dev-banner {
     position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
     height: 24px;
-    display: flex; align-items: center; justify-content: center;
+    display: none; align-items: center; justify-content: center;
     background: #dc2626; color: #fff;
     font-size: 0.7rem; font-weight: 800; letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -1087,17 +1087,6 @@
   .app.settings-wide { max-width: 1040px; }
   .app.stats-wide { max-width: 1100px; }
 
-  .top-actions { display: flex; align-items: center; gap: 8px; }
-  .icon-btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 38px; height: 38px; padding: 0;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-    color: var(--muted); cursor: pointer;
-    transition: color .12s, background .12s, border-color .12s;
-  }
-  .icon-btn:hover { color: var(--text); background: var(--surface-2); border-color: var(--accent); }
-  .icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
-
   .settings-layout { display: flex; flex-direction: column; gap: 20px; }
 
   .settings-nav {
@@ -1339,8 +1328,6 @@
   .up-acct-col-val.neg { color: var(--expense); }
   @media (max-width: 640px) { .up-acct-col { display: none; } }
 
-  @media (max-width: 640px) { .up-cards { grid-template-columns: repeat(2, 1fr); } }
-
   @media (max-width: 640px) {
     .import-body { grid-template-columns: 1fr; }
     .modal { max-height: 92vh; }
@@ -1353,7 +1340,6 @@
   @media (max-width: 520px) {
     .cards { grid-template-columns: 1fr; }
     form.entry { grid-template-columns: 1fr; }
-    header.top { flex-direction: column; align-items: stretch; gap: 12px; }
   }
 
   /* ===== Planification view ===== */
@@ -1362,7 +1348,6 @@
     gap: 12px; flex-wrap: wrap; margin-bottom: 20px;
   }
   .plan-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
-  .plan-card-editing { border: 1px solid var(--accent) !important; }
   .plan-inline-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 4px; }
   .plan-inline-label { font-size: .75rem; color: var(--muted); }
   .plan-inline-amount { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; color: var(--text); font: inherit; font-size: .9rem; width: 100%; box-sizing: border-box; }
@@ -2603,7 +2588,11 @@
             <span class="cl-date">July 16, 2026</span>
           </div>
           <div class="cl-list">
-            <div class="cl-entry"><span class="cl-tag wip">WIP</span><div class="cl-entry-text"><strong>Work in progress</strong> &mdash; Changes coming soon.</div></div>
+            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Planification month dropdown now includes months that have budget entries (was using wrong property `p.month` instead of `p.startMonth`).</div></div>
+            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Chart animation now cancels any stale loop before starting a new one — prevents multiple concurrent renders when switching views.</div></div>
+            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Transaction list sort is now deterministic: same-date transactions are ordered by ID instead of flipping on every re-render.</div></div>
+            <div class="cl-entry"><span class="cl-tag change">change</span><div class="cl-entry-text">Removed 4 unused functions &mdash; `dfEstimatePayoff()`, `initialBalanceRowHtml()`, `openCategorySettings()`, `openImportSettings()`.</div></div>
+            <div class="cl-entry"><span class="cl-tag change">change</span><div class="cl-entry-text">Removed orphaned CSS rules — `.plan-card-editing` duplicated declaration, `header.top`, `.up-cards`, `.top-actions`, `.icon-btn`.</div></div>
           </div>
         </div>
       </div>
@@ -3167,24 +3156,6 @@ function dfPlannedBalance(debt, asOfDate) {
   return balance;
 }
 
-function dfEstimatePayoff(balance, monthlyPayment, annualRate) {
-  // Kept for compatibility but payoff date now derived from dfPayoffDate.
-  if (balance <= 0) return "Paid off";
-  if (!monthlyPayment || monthlyPayment <= 0) return null;
-  var monthlyRate = (annualRate || 0) / 100 / 12;
-  var b = balance;
-  var months = 0;
-  while (b > 0.01 && months < 360) {
-    b += b * monthlyRate;
-    b -= monthlyPayment;
-    months++;
-  }
-  if (b > 0.01) return null;
-  var dt = new Date();
-  dt.setMonth(dt.getMonth() + months);
-  return dt.toLocaleDateString(undefined, { month: "short", year: "numeric" });
-}
-
 function dfPayoffDate(debt) {
   if (dfActualBalance(debt) <= 0) return "Paid off";
   if (!debt.monthlyPayment || debt.monthlyPayment <= 0) return null;
@@ -3541,7 +3512,7 @@ function getFilteredTransactions() {
     .filter(t => !range || (t.date >= range.start && t.date <= range.end))
     .filter(t => { if (!search) return true; if (t.description.toLowerCase().includes(search)) return true; const _ns = search.replace(/[^0-9.]/g, ""); return !!_ns && fmt(t.amount).replace(/[^0-9.]/g, "").includes(_ns); })
     .slice()
-    .sort((a, b) => (b.date || "").localeCompare(a.date || "") || 0);
+    .sort((a, b) => (b.date || "").localeCompare(a.date || "") || b.id.localeCompare(a.id));
 }
 
 function filtersActive() {
@@ -3581,22 +3552,6 @@ function renderTransactions() {
 
   list.innerHTML = txs.map(t => t.id === editingId ? editRowHtml(t) : viewRowHtml(t)).join("");
   renderBulkBar();
-}
-
-function initialBalanceRowHtml(t) {
-  const sign = t.type === "income" ? "+" : "-";
-  return `
-    <div class="tx tx-init-bal reviewed">
-      <div class="tx-init-label">Initial balance</div>
-      <div class="info">
-        <div class="desc"><span class="desc-text">${escapeHtml(accountName(t.accountId))}</span></div>
-        <div class="meta" style="font-style:italic;color:var(--muted)">No date · starting balance</div>
-      </div>
-      <div class="amt ${t.type}">${sign}${fmt(t.amount)}</div>
-      <div class="tx-actions">
-        <button class="del" title="Remove initial balance" onclick="setAccountInitialBalance('${t.accountId}', '')">✕</button>
-      </div>
-    </div>`;
 }
 
 /* ---------- Bulk selection ---------- */
@@ -4671,7 +4626,6 @@ function showSettingsSection(name) {
 }
 
 /* ---------- Categories (separate income / expense) ---------- */
-function openCategorySettings() { showSettingsSection("categories"); }
 
 function categoryCount(name, type) {
   return state.transactions.filter(t => t.category === name && t.type === type && !t.voided).length;
@@ -5413,6 +5367,7 @@ function renderUpcomingReview(acctF, todayISO) {
 
 
 /* ---------- Tracking / category dashboard ---------- */
+var _trackAnimId = null;
 function drawTrackChart(canvasId, dayTotals, color) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -5454,7 +5409,6 @@ function drawTrackChart(canvasId, dayTotals, color) {
 
   let progress = 0;
   let hoverIdx = -1;
-  let animId = null;
 
   function draw(prog) {
     ctx.clearRect(0, 0, W, H);
@@ -5563,8 +5517,9 @@ function drawTrackChart(canvasId, dayTotals, color) {
     progress += 0.04;
     if (progress >= 1) { progress = 1; draw(1); return; }
     draw(progress);
-    animId = requestAnimationFrame(animate);
+    _trackAnimId = requestAnimationFrame(animate);
   }
+  if (_trackAnimId) cancelAnimationFrame(_trackAnimId);
   animate();
 
   fresh.addEventListener('mousemove', e => {
@@ -5783,7 +5738,6 @@ function relinkAllRecurring() {
 // Shows the Recurring section (which resets the form via showSettingsSection) so that
 // makeRecurringFromTransaction can prefill the form afterwards.
 function openRecurringSettings() { showSettingsSection("recurring"); }
-function openImportSettings() { showSettingsSection("import"); }
 
 /* ---------- Import rules ---------- */
 function recurringRuleMismatches(rec) {
@@ -7607,7 +7561,7 @@ function planMonthOptions() {
   });
   // Include months that have planification entries
   (state.planification || []).forEach(p => {
-    if (p.month) months.add(p.month);
+    if (p.startMonth) months.add(p.startMonth);
   });
   const sorted = Array.from(months).sort().reverse();
   const thisMonth = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
