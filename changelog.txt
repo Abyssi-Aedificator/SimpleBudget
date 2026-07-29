@@ -1,0 +1,34 @@
+1.0.5
+---------------------
+• change: Migrated changelog to standalone changelog.txt file and removed all changelog code from the app (CSS, HTML, sidebar entry, What's New modal, and JavaScript).
+
+1.0.4
+---------------------
+• fix: Investment Market Value now correctly aggregates shares across multiple accounts holding the same symbol — was picking one snapshot arbitrarily, causing $0.00.
+• fix: Refresh Prices button no longer permanently locks when no API key is set or no holdings exist.
+
+1.0.3
+---------------------
+• fix: Planification month dropdown now includes months that have budget entries (was using wrong property `p.month` instead of `p.startMonth`).
+• fix: Chart animation now cancels any stale loop before starting a new one — prevents multiple concurrent renders when switching views.
+• fix: Transaction list sort is now deterministic: same-date transactions are ordered by ID instead of flipping on every re-render.
+• change: Removed 4 unused functions — `dfEstimatePayoff()`, `initialBalanceRowHtml()`, `openCategorySettings()`, `openImportSettings()`.
+• change: Removed orphaned CSS rules — `.plan-card-editing` duplicated declaration, `header.top`, `.up-cards`, `.top-actions`, `.icon-btn`.
+
+1.0.2
+---------------------
+• fix: Offline reliability — Service worker now returns a proper offline response instead of crashing on network failure.
+• fix: Category names with apostrophes — Planification view transactions button now works correctly for categories like "Children's" or "Mother's Day".
+• fix: Investment refresh — Added guard against concurrent price refresh requests causing duplicate API calls.
+• fix: Filter dropdowns — Added null checks to prevent errors when category and account dropdown elements are not yet in the DOM.
+• fix: Modal overlay on mobile — Modal dialogs now properly layer above the bottom navigation bar.
+• fix: HTML validation — Moved search inputs and buttons out of heading elements in Scheduled and Import Rules sections.
+
+1.0.1
+---------------------
+• fix: Inline budget editing — Enter key now correctly submits inline budget edits.
+• fix: Changelog layout — Fixed duplicate nested timeline container.
+
+1.0.0
+---------------------
+• new: Full release — Simple Budget 1.0.0 is here. Stable, feature-complete, and ready for everyday use.
