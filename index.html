@@ -110,9 +110,6 @@
   .nav-item:hover svg { transform: scale(1.18); }
 
   .nav-footer { border-top: 1px solid var(--border); padding-top: 10px; display: flex; flex-direction: column; gap: 2px; }
-  .changelog-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-  .changelog-list li { font-size: .875rem; color: var(--text); padding-left: 14px; position: relative; line-height: 1.5; }
-  .changelog-list li::before { content: "·"; position: absolute; left: 0; color: var(--accent); font-weight: 800; }
   .nav-action {
     display: flex; align-items: center; gap: 10px;
     width: 100%; text-align: left;
@@ -1486,78 +1483,6 @@
     content: ""; flex: 1; height: 1px; background: var(--border);
   }
 
-  /* ===== Changelog timeline ===== */
-  .cl-timeline { display: flex; flex-direction: column; }
-  .cl-item { display: flex; gap: 0; position: relative; }
-  .cl-track {
-    display: flex; flex-direction: column; align-items: center;
-    width: 32px; flex-shrink: 0; padding-top: 4px;
-  }
-  .cl-dot {
-    width: 12px; height: 12px; border-radius: 50%;
-    background: var(--accent); flex-shrink: 0;
-    box-shadow: 0 0 0 4px rgba(91,141,239,.18);
-    position: relative; z-index: 1;
-  }
-  .cl-dot.older { background: var(--border); box-shadow: none; }
-  .cl-line {
-    flex: 1; width: 2px; background: var(--border);
-    margin-top: 6px; min-height: 24px;
-  }
-  .cl-phase-section .cl-item:last-child .cl-line { display: none; }
-  .cl-content { flex: 1; padding: 0 0 36px 16px; }
-  .cl-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .cl-version-badge {
-    font-size: .75rem; font-weight: 700; letter-spacing: .5px;
-    padding: 3px 12px; border-radius: 20px;
-  }
-  .cl-version-badge.latest { background: var(--accent); color: #fff; }
-  .cl-version-badge.older { background: var(--surface-2); color: var(--muted); border: 1px solid var(--border); }
-  .cl-date { font-size: .82rem; color: var(--muted); }
-  .cl-phase-section { margin-bottom: 8px; }
-  .cl-phase-hdr {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 16px; border-radius: var(--radius);
-    margin-bottom: 20px; border: 1px solid;
-  }
-  .cl-phase-hdr.beta {
-    background: color-mix(in srgb, var(--accent) 9%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 28%, transparent);
-  }
-  .cl-phase-hdr.alpha {
-    background: color-mix(in srgb, var(--muted) 9%, transparent);
-    border-color: color-mix(in srgb, var(--muted) 22%, transparent);
-  }
-  .cl-phase-hdr.release {
-    background: color-mix(in srgb, var(--income) 9%, transparent);
-    border-color: color-mix(in srgb, var(--income) 28%, transparent);
-  }
-  .cl-phase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .cl-phase-name { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
-  .cl-phase-count { font-size: .7rem; color: var(--muted); margin-left: auto; }
-  .cl-list {
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .cl-entry {
-    display: flex; gap: 10px; align-items: baseline;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 10px 14px;
-    font-size: .88rem; line-height: 1.4;
-  }
-  .cl-tag {
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: .58rem; font-weight: 700; letter-spacing: .5px;
-    padding: 2px 7px; border-radius: 4px; flex-shrink: 0;
-    text-transform: uppercase; white-space: nowrap;
-  }
-  .cl-tag.new  { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
-  .cl-tag.fix  { background: color-mix(in srgb, var(--expense) 18%, transparent); color: var(--expense); border: 1px solid color-mix(in srgb, var(--expense) 35%, transparent); }
-  .cl-tag.change { background: color-mix(in srgb, #f59e0b 18%, transparent); color: #f59e0b; border: 1px solid color-mix(in srgb, #f59e0b 35%, transparent); }
-  .cl-tag.ui   { background: color-mix(in srgb, #a78bfa 18%, transparent); color: #a78bfa; border: 1px solid color-mix(in srgb, #a78bfa 35%, transparent); }
-  .cl-tag.wip  { background: color-mix(in srgb, #f59e0b 18%, transparent); color: #f59e0b; border: 1px solid color-mix(in srgb, #f59e0b 35%, transparent); }
-  .cl-entry-text { flex: 1; }
-  .cl-entry-text strong { color: var(--text); }
-
   /* ===== Improved summary KPI cards ===== */
   .kpi-grid {
     display: grid;
@@ -1629,7 +1554,7 @@
       <img class="app-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAfS0lEQVR42rWceZxcVZn3v+ece2vtNemkOxvZCYQlAbKwhEUGgbAoDCSizqCgsiuIfEQdJARUUEFAGEUEIYCDJBBZhBAUMEJMBGJYsocsTTaSdLrTey33nmf+uEtVdULGeV/n5tNUdfWtqnOe86y/5/eg2N81d65h5kwf4Kw/PDF8S0KdV/DlzBwyuSjSzxdfKQClUIAoEFT4Zgkfg99FoqcKhRDdqVCIlN6nAB0+ClL2KcHd0QsSvqbCX0QkfIfCQUlCq+aUqLerlXr28l25+ZdcckkOkfBLlPTdqvqkzX/+t79qWNaQuDHnuF8qJpIDrLXYogfWopDwi6NFqf19UtlXRBuw4d0KHT6z0RYFdLyr6K6yz+/7eZS+X4eHYVGIMRhjML4lUfQ+qLX+3e+d/cVHbHAaGqXsJwvg9VkOn5rtHfX0Aye1ZpKPFWuzw73eHPhilVLhcSglCGJl362qUNASnKAtO91QH9DBgWFV+KoKNqNt8FRClQrOSlWsUiTSoej7wChVplsgViQ6H5V0dSLhku3JvXB4R9dX5s38yu6+QtAVJ/+p2d4hLz58zq5+VX/MpRLDvc7uovJ8UYgWES0iSsRWqGO5wisRtAhKyjcNCkGJRUtJABJrhkJJmUqHCl15CTbWChWLVYeaJYAVCbRTUBq0g9Km4Ntid6/XUZ099/3+tW9+4Q+/HYVSdtasWbpSA+bOMMyc5x/5+9+c0VqbfL4ILp5nQRnEljYrJclLKPVY+4Vgc+Frtsy+DYFgIn9gQ4tXSsVWHotTQCm9j4RFqZIpqJKAS74gMKPSLTpYqAYrFMmk3Ex75+rRvT3TXlm5dS+33CIoJYpQGicePXr4xoS/rOA69dqzFh2sQghOVGL/JrFJS7waBVJpqeV2bFCY0Fl5CB461NFgUzo0H1eFpxq5wnBjiIqUJV5DLLpI6FIunNKpCMHaxEpRZzNudm/H/PXn//sFEvo6FZ3+iOcfmtdVX3UhnT2e1toJbb5s45WOJ9CIMldVFgSixVkUOfHp8T38oo8RIWNcUtrgaoOjNCJQtJYill7fJ+9btNGkHZe0cYJ7wu8SFUhExQavUKpMmVXZKiUwPVu2JgHPZDJOTSE/fdWZM19m7lyjAI57ac5RG5LqnaK1GN9qUCilSiGoYtvRU6n0RlEoU8GGego58IXGVJbxdQ1MqB3A4bX9GJ6pod5xSDsJXG0AyHsePX6Bj/N5NnW2s7J9D+/t3cOarnb2+h4J1yVrXDSCLwI2DIX7BgQQFfuQwBmHGhrc6/vZKm3aO97evmztcQpwAD4u5C726+q16urxlFI6sO++Qai0YVWu5ipQNKM0Od+ns5CnwUlyYdNozm8awdQBTQxKV3PAKxk8HA4wYBAAnvVZ19nOX3ZvZ962Zt7euwcfqEkk0Sp0euWOLDZTqQhyCl0yIcHY7l5rXHfKxENHHMdFlyx2vjl3bvpp2s+kJ4+x6Mgx2dgbS+ylo3itKg5fYUVoyfXQ6Ka4bNQE/m34OI6oqS/TG4kXrMo0SqmSMpX0K/BkjjaMr+3H+Np+XDp6PK/u3MHDG9awcNc20IqaZAKxYbwLw2NsHgBKB1oS/m7DwGesbyWbVl3GzAAWO2+63eN8Y8aoooeCwOCUlEm2PJaX6ZyAVoqOYgHj+1w99GC+Me4oRlXVBV8oNnBwoVMy6hMzJSr/pCp8jAAJpZneNITpTUN4ZcdH3LH2ff7atofaZBIHjU9JuJEDlCipCNKC8NAEhWisVb7rTNGAGvvMQxd11KWe9ApF0dFaREqJSrx1FcelwGtrWnt6GJep4Y4JJ3BW0zAAfAlyO32ADf9vryjOKwStNL3W5851K7h3/Uo8hKzj4gc5ALqk7rGmSqQJClBWSLjKzeW3ndhpx2vHZTyuA1pZUaoi1YhPQaQsrius0rTmcnyhaSSvnXIeZzUNw5dAzY3S/9TNRzphlEIrjS9CWhu+f8gEnjvuVEa6SdpzeQxBRLEiiLWhkmoifyZGxYmKeD4F39avc2yT7vBs0trQtuMT1yhRaBu8R1tBWR9lLVagqzfHjaOO4JHjPk1DMoUvEi7wn7vx/V1GBfbuieWEhiZeOPksJlf3p7Urh0aHfkuhRBP8M3HGqASwCvHBWswepRK61/pibezO48RGo9ESFXIlb9XV1cVtB0/g1iOmYuNT/7/feF+NcJTGE8vQdIb5J/4Lp/frT2dvDqMdBF3y/lEeYEGsQkQp64kkk6nEyNqaJq0dJ3R2FmUJclgbGo/WQTaMQpRhT08v3xxzJN8aPxnP+qj/4dStWHzfD36sxZb9+Nbiha+LyCd/Rnjv/u5zlMYXS30yyeMnn8bx/QfSkfcxaGz4T6wNQoCVisJFtFK9vb1aa62DmsiqePNBriH4of0Y49BWyHPx0DH88KgT8MVitN5vBSwi+NYPKi2lg9LUGIzW6LIfozVO+LpSKt5oX+cX3RvdJ/uYROAXahJJfnPCyYxOJMh5flCCWUH5oGxQcAUHCUoHj914OKDRSodhQyqTCRGUVnR6RY6p6cfPJ50U1PFKVcTzKHb7NhCMUUGGt2rbVt5au5YVW5rZsruFts4OCiJkHJeGujoOHjSYiSNHMmnMGJrq6vc5ea01b3+4nh8/M4/aTIbvX/QFhg8YiBWp0DyjFL4IQ1Jp7pw8lRmv/xmSBlVWH4gqxTIrgogiDzg2rIm1UqBCJyIWJYHhFK3FFD3uPvY4qt1E7PD6WqVnfRxtaO3uYs6rf+LRV17m/ZUroasT0inc2nqy2Sq0VhSLRTo7OqG7CxBSTU2cecwUrph+Fp868khMGEZ3dbRzwQ9ms6VlFxQKbGtt4cWbb+0j/JIQPLGc1jSEyw85hPtXrqI+k8aHyjJVVEXq7JTinY5hq6DqsmgU7d09fHv04ZzQvyk+4b6Xby2ONvzXote54T/vY0dzMw3jDuHKmZ/j9CMnMGbQEAbU1ZFJp9Ba43keHT097NjTwtsbN/Dssnd4dtFrPDv3SW647Epuv+wKLLCjrY2de9uoqa4h53us2LyZrt4cVakUnrU4xlSsQ6OwYvneEUewaMsW1ucKpFwHW17EhSVmWOXjEDo+sTaAGFT0UZpez2NUuobrxh8dVH77cXhWBKM1d8x/mu/++EcMHDqMB26+hYtOOZXabPYTc//abBXDBgxkyiHjufqsc3l3w3r+tuIDzj7hxHhjuWIBZQxFCYogAbrzOWozmdjJqrBwI9RiX4QaJ8GNR07gS39dQirhxqatJMSofEGF3+GESX9YzwfhUKHQWtFTLHLN4RNpTGcCifc5/Ugj3li9iu/e/3OOP34a874/i8H9+ocFjS3lkn2EV55kGa2YOHosE0ePBeCVvy/jsYULWLppAyqVRADHJNhbzHP6zd/jmOEj+Pypn+bMo4+p8BeRU7QinDt8BMetW8uStjaq3GRQi6hy1KnCBBQiQQEU1pH0+j7DUlk+N3xs6I3Vvglq6Czveup3JBMuc278LoP79afgebjG7COwfTL+UCjWWsDS2tXFdQ8+wBOv/RGsYNJpkqlUEI4BrM+arVtZuWEDj/35dS484UR+cdXXGVBbW6GhUXX672PH8tc3/go6EQDCYZ5jy7TG0ZVoVIzaduTzfGnUKJrSmX28bux4TLCwdZs20tQ0iDFNg/CtxY1yi38kz49Vu8CM23/A68veJt2/AW0cxPfp6ekBzwOlcFyXTDqDZLP4Ijy9+A027WnhpVm3MqCqOhaCVgEmcM6wYdxTXcXG2BeEFW7oB70KULRsyRYh6QvnDxlRoS77h7uFTDbL9p07eXfzJozWFLziAZOb/fmQnzz9O15fupjqhgYES28+R09PN2Mamzjt8CM5adyhDKiqprOjnZxXxAJV/fuzbPVKbnzk4bAsL8HuVoRaJ8HpQ4aSK1hUiCyV79MLTEBXoBtaQY/nM666lmMaBoQozwHOUyncVJJiscjFP72DZ26axdhBg2MfEWO5+/EBhJvf29PNo395HaehP75YbKFAPzfBz795A5859niyyQAx2dnexqN/eoXbnp5LwfcCHDGbZdHyZeSKBVJuItSCCIuGfxkyhAdWb8BahSgNyiI2BGZ9B01UCEXOD0W+6DG1fyPVTiIsQw985XM5MlVVfLBxI1Ouv5af/+EFWjs7wwzOoMMsrvxHKxU7rmUfrmfbrl24bhKrDYVcntsv+SqfP/lTZBIuIhYrQmNtPTde8DnmXHs9Xncnna0tFFtaOGzESBKOW+EHdIiCje9fS0M6QcG3cVEUpQYOXiCAyuRAY0VxdENjXxTwE69cLs/YwUNY+OOfkkgkuPbenzH2q1/my3f9hMdf/RMfNG+mpaODrnyO7nye7lyO7Xv2sG3PHgB27G5B8gU0iqIVTKaK4w47goLn4dsyuxbB8z0uOPYEXpx1G5+dNIVrZnyOX197/T5aqkJItDGV4dD6GnJ+Ea3CHkRY4TpRFJAwT1ZW4SvIYDi0tu4fACoC9U5ms3zc2cnpR05kyshRvNHVzehBg5mz4CXmLFgAgJvJkk2ng2hihdbmZi44czpP3zKbTDoNiWRgTgK5ri7eWr2Sw4YMDWuEEIhRCsc4WBGmTzqW6ZOO3W9nqpROg9GK8bV1vLRtJ6SSQXfOKsRRkQ8IgQMxKATPt9QYw0GZqj6to/04MF8wRnHa0ZO488EHeO7tt/B8n/rqav52z32c84NbeHPlSq6cfjbrm5tp7enGN4as49IwYSJnTp0KwJghg0mnkviehxLBTSX43mOPUFtVzWemTMXRpsJpirWBBw+LI63UfpO06BqRrQI/qiZLHalAA6yuQHt9K9QYl/pE4pPap6XUUwdV3LXnnsu8lxdwyU9/gptJ01hbiwISfpGMX+SOi7/8iZ/h+R7jhx3EMQcN581VK6mqq8OaFLsLBS6483aOHjKMkw+fwMlHTmDymLEM7t8fwizO8/0g1/gf8IjGbAYHFZT7McYheBI1VkMMXYnCWqhKJkkaJ67yDlTva60Z2jCAx269DR/LrtY9fNzWxnNv/Y2uQgHjJg64OMc4ONpw+5e/QjaRpLtQxHVcksYh4yb5e3Mzd8+fx3m3zmLCN67k7Fnf49cLX6KlswPHmDiPOBDY2i/p4ipNGJQQKWELauB/PX4H1VU3kuv1tTKmu1hgYk0Nr04/F1dVtqn3V642797NL5//Pb9b/AbN27bhZrJ41iKeT6Kmmqp0mstOPoWDBw2mpqoaZQyFQoE9nZ2s2PQhrXv3ctcVVzO0fwN/em85l9x7F1u3b0dnsiSTSRzjQIj+5AoFJJ8Hr8hBDQO4+tzPcMMFM2NTUPvJMbRSLGtp4fQXX8VJJMJy2IpOKlUtPWc4sTuTstaWqAMQCEon/+uXF3DtfffQu3sXEyZP5qqvXc6nj55Erugx88c/ZGtLC60dHdzx5G+DuOS44PnQ3QO+B8kkqVSKT088hkvPOpvTJhzFX396N/fOf5r5S5ewadfuwJMlk7iJBGnXRTkOGtjR3cWND/2Kv2/exKPXfYuEcWLCxv5gZYn3GD6KBs+JEiEdb1WLotfzKIrFVWYfyUYn/8O5T3HTz+/mkEMP5c6bb+GsqcdV3JdRivGDBzN66BAWLF+OSaYYkK1i+uQpTBo+nIOHDGXM4MEMDQsnEYvnW4b1H8CdX7uSm//tYhavWMFr77/P4nWrWdHcTOeeFkinyaYzJJIp0pksT/1xISMHDOT2L126n4ItWH1voUih6OEkkgEyVtbWc0oNBRNASErRmcuT8zwyCVPhB6Lq79Xly7npZ3dyyrRpPHvbD6lNZxARitbGiJEW8Ao+z980m+m3zmLh0qVs6+jiyVf+yKqxYxk+oIHRjY3oXJ4jRo/mnGnTAozP90FBTTrL9MlTmT55KgKs3baFF5cu5ZFFr7Fy2zZSyRS2UCBRU8vDCxdw3Xn/SmNtXZ+iKLj25AsUbYQXhO0RETw8NISEh6h1pKDb82nPF9g3Ewp+eWjhyySrq3johm9Tm85Q9MK0VAdOydGaGaecyroVK5j/1lsM6defam14efatHDFiBIvfe5fX3nuX2379IK8uW8a44SNIOm6MH6ow6fFtAKqCcMiQYXzrghks+cndTD/8CArt7RjAcRx253Ms37Qxtvu+vdxd3b2IqJicEXZawAPHlhEbBMFow958gc2dXYysrsYCJqK3hCXx2h3bGHTQcEaH1Z/jOLHkTeiZr7/wQp5btIgZ3/kOAw8aQl2/ek4/ZhKvffA+b69fw1t334OxMKBfPa427O7oYF3zJo4YNYaabBbf+pg+8b/oeVSnUnzr/At5+Z13EK3RRkOul+aW3SXEp8+1oaMr7hQpUaioDRDkvWWlvQT9gB7RrNzbvv/qD0inkmxv2cWqrVuC6q9Y7JONCXWZLM/ffjtTxo/j4+bN7Ni7l/teeI6NO7ahxdJQXcvghgZcbVj+4XqmfP0qpl1/Hcdddw3rdmzDaEPR84IeY1iPaBUAr/1qajCZFFYF4RtPcJTZb54CsLK1Pcwgozwg7JUTONRw84EZiA1s+G+7du8nCoSUF20odHVz8U9/TPPuXSRdF6VUjP9HCPHwgY0suvc+fnTl1TSkknxj1veZt3AhBaW56AezWdu8GYD7n53P5o+aqRo4kFUf7+Czt93C2m1bcR0HrUqFlOs4GK357euv4eVysUCUoxnR2FiRDkd0up09Paze20nSTVTQdiL70JHtR3QTsULaMby1Yydt+XwcY8v72MXeHIl0hmXr1zP1+ut4fNGfyReLMf6vlMJojbWWhDZ8d+ZFrPzNHF745QNc98WLOeWoo3h+yRus2vpRoFHpFCRdREOmppo127Zx0rev50fznmL5pg1sb2tle1srS9as5tL77+HuF54lmU4j1pL3iowc3MTkMWMrTt2GCdI7O1vY2pMj4YQaELEQlQp8SNAHDHwhofPJKM2Wjk4W79jBOSNG4IvFKUs3e70i4w46iB9e+lUuue8eLv7xj5jdOIjPnjCNMyZN4ogRIxhQU1sRkuqrqvn0MVM4qHEwz7/9N95Z/neeX7KU844/ka+fdwFPLVnMnq4usqk06VSK1nye/3j8UW57+ndUJxNgLW29eTxrSWWzQeaqNX5nBzdc+jVqUqk4SsX0HaV4ZdMWip6PFolpexHByw8gMRUSDDQRVqwFrGjmrt/MOSNGoCQOEigglc6wtWUP506azBmHHc78xW9gHIefPfEEP/v970mnkjTV1dIvkyVlDAVraeloZ+vOnRRbWyHhMHzUaA4fORLfWsYNGcpT3/oOM344m9b2dtK1dWSSSVQmQ8Hzac97AZicTFHtukFWmM9RbGvn8s/+K1eceTa2D2RvtGZ3Ps+fPtpBleNirS0RMEJ/Z4LGSIQGSwX8lc2keXXLDj7s6GR0TYC3ibVgDCePP4yfPPQQi1avxnUdEokEy3/xAF+7+y7mLVnC+SeexMctLWzftZs9xR6SCYchjY1MO/wIJo4cyZSDD2bC2LFUpzLxgk896mjevPs+bnzkYV5462/0FouQTpHJVuMkgjac9YW2tjbI5xg4YADfvvxqvnXeBQFoU7Z5awOk+Q8bPuLDzhx12Wzgm6Jeqe3bF5AyFlZYACcM7MoVeXTNBn4wZWJgITowkavPPodHn3uWGTffRENTE9VVNWRcl/411aCEX111FVWJJHnfizG/hDb7LVieW7KEux+fw13XXscx4w7h+Ztns+jdd3n13b+zeMN63ly/DoPBiuAoxYXTTuTU8Ydx7nEnMLR//wBR1pUpsAqJWnNWbcRJJgMnKqWUOCY9+mFrzEgZATlUE99CNpnk0RVr+cq4kYysrcUPOTkHDRzIM7ffzvmzZrN67Xr6NQ3knQ0b6M7l0cVirEVBRbmfWgJ4d8MGfrXgRR78/TNkE0k6urqDDrC1nDxxIidPnMja7VuZeM0VKDdJ0fdorKvlietvIOm4cTlsjK5YuR+e/u/WbGDJzjbqqjJYKzGdVoWtP0QFPiBakCIiGAk2LBhcpdjd08PsxW/zyFmnIQQIi28t0w49jKX33cf35sxh7uuvMvnSL2OqsjhKc9+zv2fK2IOpq8riOA6+Z+no7eGjnTtZvn4df37/Pd5buwas5dxTT+NnV1zFmMbGwI4dgxfC4Ll8gWLRJ5MyGKDoC925HE46iDR9W2M2BER35nLcvvQDUo4TtsUlZjgJlWwyR9sy2mvIE7ChmligJpth7ofNnLdxM+eNGhFKOAhxoxsbeerb3+bac8/myZdfZtGKFWzYs4f/+M9fhESLsDevImqphYTLqKYmLjvnXL54xpmcdPiR+3Z3HAdEGDN4MFMPHc9fV7wPRY9TphxLXbYKROJ7+wrA0Zqb/vI2a/d2068mi+9b9oG2QsDUeHFvMOI92hLJME6nFG4mw3ffeJtJAxsYWlUV8wP80JMcf+hhHH/oYXjWZ+PHH7Nq23aad+1i19695LwCrtY0VNcwatAgxg8dxphBg+IQKRGbrGxD0UllkymevWkWD73yMgnX5bIzzqzMS8qRJRts/snV63ls5SZqq6rwrMSESrFRQySIeloUNVLUquFXj99ha2tvlFzeV8qaCgBESq3nzp4CJw2o5+nPnEaVE3RcTdzaCnt8xvzDNJeIDGG0/v+mzER2/15LK2fMfYUe7ZJyTJxCUwZ8BxFQiatFhuvCp3Q6JNbF/NqInGxVWDwI1hfqkkle37qbK19+Az9k4djQtrQOmCARnS2iv3ghPSZ+bm3IHyRmffwjrbPo/fsrdDxrMVqxsaOLi57/C52iSTkuggl56qW9RVx8jVa24BX2dud3ayN6O76U86zjgkHFFZRQtB712TTz1m/hygWL8EMKjN+HsqrDNNgxJqDAhI8RHUYrzf+GUhU5Oycsk8uVs2gDUHRjRyfnPf0KGzp7ySYTYdETsd0CspQVXeIOCjhCYbiT7taO9lepoh+whkTFZaKU8exsuD1fCXW11Ty+bhsXv7iIzkIhYGaEaOOBAMp/5iUi+L4NKsmdLZz9u4Ws2dtDTToZ9hBiemW4fhNzHoKQZxAr22fQtkMfXJv6wPFtq9KuiuEyG/wnwNF0oEpKgwpqp/rqLPM3bufseS/z3u49OFrHxKr/S8KcRJwDpXCMZu6ajZw9908093rUVWXC7rcKiZ227EBU2YCMsRhXHGTt5ZdfXtQLZs78OOn7yzCuWKus+MSDCiJl/FtKLCsPS202xTutXUx/agG/eG81VpXICf4/WRMkdHQKcLRmd2+Oq/+4lItfWkKXcchmUvgRtikljrNIIIyoHwAK0QallUqKvzCmD7l+8QltfRUMQgUtUonHQkoVgghIyNfzraU6nSJnEnzz1beY/tQCFm3ZHviAEJ31rcRl6f/TpkXijRutyFufXy9fzYmPv8gv3t1ANpMl4bjYUEvBBGivjchQKgzxAcPVWhHRRpve7u4RXs/8UCSizrnlwfRbA6tXFrNVw5XvSSAYiSvD8kGmvpN3SgLr6ujtJQlMHz6ILx95MKeOGExC6Qo02ZYPUinKpgQrsce+BMy2fJ5n1zXz8PsfsnR7K4lkkkwigVXh7GKZ76oEMiWuZMPJJ8+pqnKqu9t+ufnKGVcxd64xcIqzbvaF+cbPztzrZavP972iF9JDy+bVyuYEVOWQAmFiknITaGN4b9denlmzmYUfbmFXVzcpV9Mvk8I1JmiJhz/7tMr7/K0tl+PNj3bwi2Vr+e5f3mXOyk3syhepy2ZxHUNpNEr2GZIIJkTKFhpopFXaKDfX2TVIuj6//aVnOxk/L5oam2vUzJn+sAfnPdldXX+R19leVOAKglKVhVJMo5GKobh4RMWgEGvpzhXIF4rUJAyj67Ic1r+G8Q31jK6voX82TU3CwU0kEd8nXyzSUfDY0dnNxr2drGpt5/1de2lu76HXKjLJJJmEA0pivxR8bxBSRUrjHdEcjZSN8ShBLMpzEsat7dx96YfXXfwIM+Ya5s30VTyReAvqM8Mezi4t1LzkZWum2Z6uomjlKBXOkOyjYVGnRYcSLqdfBUtTBCEyV8hTKHqI7+MocJQiqQMKrljBsz55EYo2QG2M65JKJEg5blCCWxtMhVYMbgRTIVH9EpumhAm9VpF5WMFIsrbK1HXt/Mmay2bcePKsWc6i2bO9Ssxz1izN7Nl2zKx7a3obm57J19SfVuzpRWHjJEGV5ZRSthzKyFXRfA5lk1sqosmE7PKI1x8PEqpwskRFtF2wUsr5dchEsIoyP1T5/X0FYBGrBItJOI6jqPG7v998xYU/8INxuTgulJL3RYuEWbN06+zv5J6fdNiTL6bqs77jTpVM1ohfVFhrRcKRU1tmXBUjc6qinCmpajhwIQqLjnMKtEFpHRCYlC5LvFQ8uROPwITfpkLqe5yyx7PTUUYfDOGK42qdTGk317Gjttj51Y3XfP6XMmuW5ppr7IGHp0VUNGU99sEnJnbY5DfFt+f5bqLGuokSnR6wvl859UlfQVT4+ZiOS9nQZflAt+qrUVL6uPLoE/kfiw0aHcYE9xiD1ga8PMoWN2St9+TI4rb7X7vuup3lE/EHFkD0+ty5OnrDsfc/Nma3mFN91z3ORx0mqKaCLzrtqCbfYiJ6WomQXPpoVTZoLKrP35XqMxuuysbs2bfTE95oMEHdocH3/d6c57e4UNBabUklnXeTWv1xQs9Hb/722ms7+v7vAPpe/w06mcxEt8bsPQAAAABJRU5ErkJggg==" alt="" />
       <div>
         <div class="nav-brand-name">Simple Budget</div>
-        <div style="font-size:.62rem; color:var(--muted); letter-spacing:.4px; font-weight:600; margin-top:2px;">Version 1.0.4</div>
+        <div style="font-size:.62rem; color:var(--muted); letter-spacing:.4px; font-weight:600; margin-top:2px;">Version 1.0.5</div>
       </div>
     </div>
     <div class="nav-items">
@@ -1660,10 +1585,6 @@
       <button id="tab-statistics" class="nav-item" onclick="showView('statistics')">
         <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         Statistics
-      </button>
-      <button id="tab-changelog" class="nav-item" onclick="showView('changelog')">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        Changelog
       </button>
       <button id="tab-settings" class="nav-item" onclick="showView('settings')">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -2568,105 +2489,6 @@
     </div>
   </section>
 
-  <section id="view-changelog" class="hidden">
-    <div class="view-header" style="margin-bottom:32px">
-      <div class="view-header-left">
-        <h1 class="view-title">Changelog</h1>
-        <p class="view-subtitle">What&#39;s new in Simple Budget</p>
-      </div>
-    </div>
-
-    <div class="cl-timeline">
-
-      <div class="cl-item">
-        <div class="cl-track">
-          <div class="cl-dot"></div>
-        </div>
-        <div class="cl-content">
-          <div class="cl-head">
-            <span class="cl-version-badge latest">1.0.4</span>
-            <span class="cl-date">July 25, 2026</span>
-          </div>
-          <div class="cl-list">
-            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Investment Market Value now correctly aggregates shares across multiple accounts holding the same symbol &mdash; was picking one snapshot arbitrarily, causing $0.00.</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Refresh Prices button no longer permanently locks when no API key is set or no holdings exist.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cl-item">
-        <div class="cl-track">
-          <div class="cl-dot"></div>
-        </div>
-        <div class="cl-content">
-          <div class="cl-head">
-            <span class="cl-version-badge">1.0.3</span>
-            <span class="cl-date">July 16, 2026</span>
-          </div>
-          <div class="cl-list">
-            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Planification month dropdown now includes months that have budget entries (was using wrong property `p.month` instead of `p.startMonth`).</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Chart animation now cancels any stale loop before starting a new one — prevents multiple concurrent renders when switching views.</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">fix</span><div class="cl-entry-text">Transaction list sort is now deterministic: same-date transactions are ordered by ID instead of flipping on every re-render.</div></div>
-            <div class="cl-entry"><span class="cl-tag change">change</span><div class="cl-entry-text">Removed 4 unused functions &mdash; `dfEstimatePayoff()`, `initialBalanceRowHtml()`, `openCategorySettings()`, `openImportSettings()`.</div></div>
-            <div class="cl-entry"><span class="cl-tag change">change</span><div class="cl-entry-text">Removed orphaned CSS rules — `.plan-card-editing` duplicated declaration, `header.top`, `.up-cards`, `.top-actions`, `.icon-btn`.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cl-item">
-        <div class="cl-track">
-          <div class="cl-dot"></div>
-        </div>
-        <div class="cl-content">
-          <div class="cl-head">
-            <span class="cl-version-badge">1.0.2</span>
-            <span class="cl-date">July 15, 2026</span>
-          </div>
-          <div class="cl-list">
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Offline reliability</strong> &mdash; Service worker now returns a proper offline response instead of crashing on network failure.</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Category names with apostrophes</strong> &mdash; Planification view transactions button now works correctly for categories like "Children's" or "Mother's Day".</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Investment refresh</strong> &mdash; Added guard against concurrent price refresh requests causing duplicate API calls.</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Filter dropdowns</strong> &mdash; Added null checks to prevent errors when category and account dropdown elements are not yet in the DOM.</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Modal overlay on mobile</strong> &mdash; Modal dialogs now properly layer above the bottom navigation bar.</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>HTML validation</strong> &mdash; Moved search inputs and buttons out of heading elements in Scheduled and Import Rules sections.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cl-item">
-        <div class="cl-track">
-          <div class="cl-dot"></div>
-        </div>
-        <div class="cl-content">
-          <div class="cl-head">
-            <span class="cl-version-badge">1.0.1</span>
-            <span class="cl-date">July 12, 2026</span>
-          </div>
-          <div class="cl-list">
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Inline budget editing</strong> &mdash; Enter key now correctly submits inline budget edits.</div></div>
-            <div class="cl-entry"><span class="cl-tag fix">Fix</span><div class="cl-entry-text"><strong>Changelog layout</strong> &mdash; Fixed duplicate nested timeline container.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cl-item">
-        <div class="cl-track">
-          <div class="cl-dot"></div>
-        </div>
-        <div class="cl-content">
-          <div class="cl-head">
-            <span class="cl-version-badge">1.0.0</span>
-            <span class="cl-date">July 3, 2026</span>
-          </div>
-          <div class="cl-list">
-            <div class="cl-entry"><span class="cl-tag new">New</span><div class="cl-entry-text"><strong>Full release</strong> &mdash; Simple Budget 1.0.0 is here. Stable, feature-complete, and ready for everyday use.</div></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
 </div><!-- /app -->
 </div><!-- /app-shell -->
 
@@ -2681,25 +2503,6 @@
     <div class="modal-foot">
       <button class="btn secondary" onclick="confirmCancel()">Cancel</button>
       <button class="btn" id="confirm-ok-btn" style="background:var(--expense);border-color:var(--expense)" onclick="confirmOk()">Delete</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== WHAT'S NEW MODAL ===== -->
-<div id="whats-new-overlay" class="modal-overlay hidden" onclick="onWhatsNewOverlayClick(event)">
-  <div class="modal" style="max-width:500px;">
-    <div class="modal-head">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span id="whats-new-version" class="cl-version-badge latest" style="font-size:.78rem;"></span>
-        <h2 style="font-size:1.05rem;">What's new</h2>
-      </div>
-      <button class="modal-close" title="Dismiss" onclick="dismissWhatsNew()">&#x2715;</button>
-    </div>
-    <div id="whats-new-body" style="padding:18px 20px;overflow-y:auto;max-height:55vh;">
-    </div>
-    <div class="modal-foot">
-      <button class="btn secondary" onclick="dismissWhatsNew();showView('changelog')">View full changelog</button>
-      <button class="btn" onclick="dismissWhatsNew()">Got it</button>
     </div>
   </div>
 </div>
@@ -2735,8 +2538,6 @@
 "use strict";
 
 const STORAGE_KEY = "simplebudget.v1";
-const APP_VERSION  = "1.0.4";
-const WHATS_NEW_KEY = "simplebudget.whatsNew";
 const DEFAULT_EXPENSE_CATEGORIES = [
   { name: "Generic Expense", color: "#9aa3b2" },
   { name: "Bank Transfer", color: "#64748b" },
@@ -3195,10 +2996,10 @@ function dfPayoffDate(debt) {
 function showView(name) {
   // Remember where we were on the Budget tab so we can return to it.
   if (!document.getElementById("view-budget").classList.contains("hidden")) budgetScrollY = window.scrollY;
-  const views = { budget: "view-budget", upcoming: "view-upcoming", tracking: "view-tracking", statistics: "view-statistics", planification: "view-planification", investments: "view-investments", settings: "view-settings", changelog: "view-changelog", debtfree: "view-debtfree" };
+  const views = { budget: "view-budget", upcoming: "view-upcoming", tracking: "view-tracking", statistics: "view-statistics", planification: "view-planification", investments: "view-investments", settings: "view-settings", debtfree: "view-debtfree" };
   if (!views[name]) name = "budget";
   Object.keys(views).forEach(v => document.getElementById(views[v]).classList.toggle("hidden", v !== name));
-  ["budget", "upcoming", "tracking", "statistics", "planification", "investments", "settings", "changelog", "debtfree"].forEach(v =>
+  ["budget", "upcoming", "tracking", "statistics", "planification", "investments", "settings", "debtfree"].forEach(v =>
     document.getElementById("tab-" + v).classList.toggle("active", v === name));
   document.querySelector(".app").classList.toggle("settings-wide", name === "settings");
   document.querySelector(".app").classList.toggle("stats-wide", name === "statistics");
@@ -7502,45 +7303,8 @@ function confirmCancel() {
   document.getElementById('confirm-overlay').classList.add('hidden');
 }
 
-/* ---------- What's New ---------- */
-const WHATS_NEW_ENTRIES = {};
 
-function checkWhatsNew() {
-  const seen = localStorage.getItem(WHATS_NEW_KEY);
-  if (seen === APP_VERSION) return;
-  // Collect entries for all versions the user has not seen yet
-  const versions = Object.keys(WHATS_NEW_ENTRIES);
-  const seenIdx = versions.indexOf(seen);
-  const unseen = seenIdx === -1 ? versions : versions.slice(0, seenIdx);
-  if (unseen.length === 0) { localStorage.setItem(WHATS_NEW_KEY, APP_VERSION); return; }
-  const body = document.getElementById("whats-new-body");
-  body.innerHTML = unseen.map(function(ver) {
-    const entries = WHATS_NEW_ENTRIES[ver];
-    const isLatest = ver === APP_VERSION;
-    const hdr = unseen.length > 1
-      ? '<div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;margin-top:' + (isLatest ? '0' : '18px') + 'px">' + ver + '</div>'
-      : '';
-    return hdr + '<div class="cl-list" style="gap:6px;">'
-      + entries.map(function(e) {
-          return '<div class="cl-entry"><span class="cl-tag ' + e.type + '">' + e.type.charAt(0).toUpperCase() + e.type.slice(1) + '</span>'
-            + '<div class="cl-entry-text"><strong>' + e.title + '</strong> &mdash; ' + e.desc + '</div></div>';
-        }).join("")
-      + '</div>';
-  }).join("");
-  document.getElementById("whats-new-version").textContent = APP_VERSION;
-  document.getElementById("whats-new-overlay").classList.remove("hidden");
-}
-
-function dismissWhatsNew() {
-  localStorage.setItem(WHATS_NEW_KEY, APP_VERSION);
-  document.getElementById("whats-new-overlay").classList.add("hidden");
-}
-
-function onWhatsNewOverlayClick(e) {
-  if (e.target === e.currentTarget) dismissWhatsNew();
-}
-
-(function init() {
+  (function init() {
   // Default date = today.
   const todayISO = new Date().toISOString().slice(0, 10);
   document.getElementById("f-date").value = todayISO;
@@ -7551,14 +7315,12 @@ function onWhatsNewOverlayClick(e) {
   const postedOnLoad = processRecurring();
 
   initUI();
-  checkWhatsNew();
   if (postedOnLoad > 0) toast(`Posted ${postedOnLoad} recurring transaction(s).`);
 
   // Close the import preview with Escape.
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       if (!document.getElementById("import-modal").classList.contains("hidden")) cancelImport();
-      if (!document.getElementById("whats-new-overlay").classList.contains("hidden")) dismissWhatsNew();
     }
   });
 })();

@@ -1,0 +1,28 @@
+Version 1.0.5
+- Changed: Migrated changelog to standalone changelog.txt file and removed all changelog code from the app (CSS, HTML, sidebar entry, What's New modal, and JavaScript).
+
+Version 1.0.4
+- Fixed: Investment Market Value now correctly aggregates shares across multiple accounts holding the same symbol — was picking one snapshot arbitrarily, causing $0.00.
+- Fixed: Refresh Prices button no longer permanently locks when no API key is set or no holdings exist.
+
+Version 1.0.3
+- Fixed: Planification month dropdown now includes months that have budget entries (was using wrong property `p.month` instead of `p.startMonth`).
+- Fixed: Chart animation now cancels any stale loop before starting a new one — prevents multiple concurrent renders when switching views.
+- Fixed: Transaction list sort is now deterministic: same-date transactions are ordered by ID instead of flipping on every re-render.
+- Changed: Removed 4 unused functions — `dfEstimatePayoff()`, `initialBalanceRowHtml()`, `openCategorySettings()`, `openImportSettings()`.
+- Changed: Removed orphaned CSS rules — `.plan-card-editing` duplicated declaration, `header.top`, `.up-cards`, `.top-actions`, `.icon-btn`.
+
+Version 1.0.2
+- Fixed: Offline reliability — Service worker now returns a proper offline response instead of crashing on network failure.
+- Fixed: Category names with apostrophes — Planification view transactions button now works correctly for categories like "Children's" or "Mother's Day".
+- Fixed: Investment refresh — Added guard against concurrent price refresh requests causing duplicate API calls.
+- Fixed: Filter dropdowns — Added null checks to prevent errors when category and account dropdown elements are not yet in the DOM.
+- Fixed: Modal overlay on mobile — Modal dialogs now properly layer above the bottom navigation bar.
+- Fixed: HTML validation — Moved search inputs and buttons out of heading elements in Scheduled and Import Rules sections.
+
+Version 1.0.1
+- Fixed: Inline budget editing — Enter key now correctly submits inline budget edits.
+- Fixed: Changelog layout — Fixed duplicate nested timeline container.
+
+Version 1.0.0
+- Added: Full release — Simple Budget 1.0.0 is here. Stable, feature-complete, and ready for everyday use.
