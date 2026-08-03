@@ -1,3 +1,6 @@
+Version 1.0.6
+- Fixed: Budget inline edit — pressing Enter now saves the amount and Escape cancels (was broken by a malformed keyboard handler).
+
 Version 1.0.5
 - Changed: Migrated changelog to standalone changelog.txt file and removed all changelog code from the app (CSS, HTML, sidebar entry, What's New modal, and JavaScript).
 
