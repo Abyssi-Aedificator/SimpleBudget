@@ -7618,6 +7618,7 @@ function renderPlanification() {
     // Actual income for the month — excluding Bank Transfers (not real income)
     var incomeTx = state.transactions.filter(function(t) {
       return t.type === 'income' && t.date && t.date.slice(0,7) === month
+          && t.date <= _planTodayISO
           && t.category !== 'Bank Transfer' && !t.isInitialBalance && !t.voided;
     }).reduce(function(s,t){ return s + t.amount; }, 0);
     var totalIncome = incomeTx;
@@ -7633,6 +7634,7 @@ function renderPlanification() {
     // Actual expenses for the month
     var expTxAll = state.transactions.filter(function(t) {
       return t.type === 'expense' && t.date && t.date.slice(0,7) === month
+          && t.date <= _planTodayISO
           && t.category !== 'Bank Transfer' && !t.isInitialBalance && !t.voided;
     });
     var spentExp = expTxAll.reduce(function(s,t){ return s + t.amount; }, 0);
@@ -7698,6 +7700,7 @@ function renderPlanification() {
     var txs = state.transactions.filter(function(t) {
       if (t.type !== type || t.category !== entry.categoryName) return false;
       if (!t.date || t.date.slice(0, 7) !== month) return false;
+      if (t.date > _planTodayISO) return false;
       if (!inclRec && t.recurringId) return false;
       return true;
     });
@@ -7706,6 +7709,7 @@ function renderPlanification() {
       state.transactions.forEach(function(t) {
         if (t.type !== "income" || t.category !== "Refund" || (t.refundCategory || "") !== entry.categoryName) return;
         if (!t.date || t.date.slice(0, 7) !== month) return;
+        if (t.date > _planTodayISO) return;
         spent -= t.amount;
       });
     }
