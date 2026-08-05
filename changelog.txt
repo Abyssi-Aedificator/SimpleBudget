@@ -1,5 +1,14 @@
 Version 1.0.6
 - Fixed: Budget inline edit — pressing Enter now saves the amount and Escape cancels (was broken by a malformed keyboard handler).
+- Fixed: Planification no longer double-counts transactions dated later in the viewed month (they appeared as both spent and upcoming).
+- Fixed: Tracking view charts now animate independently instead of one cancelling the other's animation.
+- Fixed: Debt planned balance was one month ahead of the schedule — now matches the monthly table and payoff estimate.
+- Fixed: Transaction edit form no longer allows assigning a regular transaction to an Investment account.
+- Fixed: CSV import handles ISO dates and validates day/month ranges instead of silently swapping day and month.
+- Fixed: CSV import parses parenthesized negatives and comma decimal separators correctly.
+- Fixed: Renaming or deleting a category now updates planification budgets, import rules, and refund links.
+- Fixed: Restoring a backup relinks recurring rules before posting, preventing duplicate auto-posted transactions.
+- Fixed: Net worth chart now includes opening (initial) account balances.
 
 Version 1.0.5
 - Changed: Migrated changelog to standalone changelog.txt file and removed all changelog code from the app (CSS, HTML, sidebar entry, What's New modal, and JavaScript).
