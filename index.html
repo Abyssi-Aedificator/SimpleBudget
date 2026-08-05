@@ -3729,20 +3729,28 @@ function chartWindowStart(period, firstISO) {
 }
 
 function buildSeries(acctF, period) {
+  const delta = t => (t.type === "income" ? t.amount : -t.amount);
+  // Opening balances (date-less initial-balance entries) form the base of the series.
+  const initBal = state.transactions
+    .filter(t => t.isInitialBalance && !t.voided && (acctF === "all" || t.accountId === acctF))
+    .reduce((s, t) => s + delta(t), 0);
+
   const scoped = state.transactions
     .filter(t => !t.isInitialBalance && !t.voided && t.date && (acctF === "all" || t.accountId === acctF))
     .slice()
     .sort((a, b) => a.date.localeCompare(b.date));
 
-  if (!scoped.length) return { points: [], startVal: 0, endVal: 0 };
-
-  const delta = t => (t.type === "income" ? t.amount : -t.amount);
   const todayISO = toISODate(new Date());
+
+  if (!scoped.length) {
+    return { points: [{ date: todayISO, value: initBal }], startVal: initBal, endVal: initBal };
+  }
+
   const firstISO = scoped[0].date;
   const startISO = chartWindowStart(period, firstISO);
 
   // Carried-forward opening value: everything strictly before the window.
-  let running = 0;
+  let running = initBal;
   let i = 0;
   for (; i < scoped.length && scoped[i].date < startISO; i++) running += delta(scoped[i]);
   const startVal = running;
