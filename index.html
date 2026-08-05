@@ -2963,7 +2963,6 @@ function dfPlannedBalance(debt, asOfDate) {
   var monthlyRate = (debt.interestRate || 0) / 100 / 12;
   var d = new Date(debt.startDate + "T12:00:00");
   var target = new Date(asOfDate + "T12:00:00");
-  d.setMonth(d.getMonth() + 1);
   while (d <= target && balance > 0) {
     balance += balance * monthlyRate;
     balance -= debt.monthlyPayment;
