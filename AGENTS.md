@@ -16,6 +16,8 @@ Open `index.html` directly in a browser via `file://` protocol. CORS warnings fo
 
 - Each bug fix or feature change must be committed individually (one commit per fix).
 - Group only truly atomic, related changes (e.g. changelog + version bump for the same release) into the same commit when explicitly instructed.
+- Never push to origin unless explicitly asked.
+- Always update changelog.txt under the latest version entry (e.g. Version 1.0.6) when making a fix or feature change. Never create new version headers on your own.
 
 ## No tooling
 
