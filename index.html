@@ -6342,10 +6342,40 @@ function parseCsvDate(s) {
 }
 
 function parseAmount(s) {
-  const cleaned = String(s).trim().replace(/[^0-9.\-]/g, "");
-  if (cleaned === "" || cleaned === "-") return null;
-  const n = parseFloat(cleaned);
-  return isNaN(n) ? null : n;
+  let raw = String(s).trim();
+  if (!raw) return null;
+  let negative = false;
+  // Accounting-style parenthesized negatives: (12.50)
+  if (/^\(.*\)$/.test(raw)) { negative = true; raw = raw.slice(1, -1); }
+  if (raw.charAt(0) === "-") { negative = !negative; raw = raw.slice(1); }
+  if (raw.charAt(0) === "+") raw = raw.slice(1);
+  // Keep only digits and separators (currency symbols, spaces, thousand groups stripped).
+  raw = raw.replace(/[^0-9.,]/g, "");
+  if (!raw) return null;
+
+  let normalized;
+  const hasComma = raw.indexOf(",") !== -1;
+  const hasDot = raw.indexOf(".") !== -1;
+  if (hasComma && hasDot) {
+    // The last separator is the decimal one; the other groups thousands.
+    if (raw.lastIndexOf(",") > raw.lastIndexOf(".")) {
+      normalized = raw.replace(/\./g, "").replace(/,/, ".");
+    } else {
+      normalized = raw.replace(/,/g, "");
+    }
+  } else if (hasComma) {
+    // Single comma: a two-digit fraction is a decimal comma (12,50), anything else is a thousands group.
+    const parts = raw.split(",");
+    normalized = (parts.length === 2 && parts[1].length === 2)
+      ? parts[0] + "." + parts[1]
+      : raw.replace(/,/g, "");
+  } else {
+    normalized = raw;
+  }
+
+  const n = parseFloat(normalized);
+  if (isNaN(n)) return null;
+  return negative ? -Math.abs(n) : n;
 }
 
 function processCSVText(text, filename) {
