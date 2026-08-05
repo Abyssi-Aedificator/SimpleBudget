@@ -6308,10 +6308,37 @@ function parseCSV(text) {
   return rows;
 }
 
+function isValidYMD(y, mo, da) {
+  if (mo < 1 || mo > 12 || da < 1) return false;
+  const d = new Date(y, mo - 1, da);
+  return d.getFullYear() === y && d.getMonth() === mo - 1 && d.getDate() === da;
+}
+
 function parseCsvDate(s) {
-  const m = String(s).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (!m) return null; // M/D/YYYY
-  return m[3] + "-" + m[1].padStart(2, "0") + "-" + m[2].padStart(2, "0");
+  const t = String(s).trim();
+  if (!t) return null;
+  // ISO dates pass through (validated).
+  const iso = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (iso) {
+    const y = +iso[1], mo = +iso[2], da = +iso[3];
+    return isValidYMD(y, mo, da) ? t : null;
+  }
+  const isoSlash = t.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+  if (isoSlash) {
+    const y = +isoSlash[1], mo = +isoSlash[2], da = +isoSlash[3];
+    return isValidYMD(y, mo, da) ? y + "-" + String(mo).padStart(2, "0") + "-" + String(da).padStart(2, "0") : null;
+  }
+  // Slash dates: D/M/YYYY or M/D/YYYY. This app targets French-Canadian banks,
+  // where day-first is the convention; a value that can only be one or the other
+  // is read unambiguously, and ambiguous values (both ≤ 12) default to day-first.
+  const m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!m) return null;
+  const a = +m[1], b = +m[2], y = +m[3];
+  const dayFirst = isValidYMD(y, b, a);
+  const monthFirst = isValidYMD(y, a, b);
+  if (dayFirst) return y + "-" + String(b).padStart(2, "0") + "-" + String(a).padStart(2, "0");
+  if (monthFirst) return y + "-" + String(a).padStart(2, "0") + "-" + String(b).padStart(2, "0");
+  return null;
 }
 
 function parseAmount(s) {
