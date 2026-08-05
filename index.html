@@ -6250,6 +6250,8 @@ function restoreData(event) {
         }
       };
       saveState();
+      // Link any existing transactions to their recurring rules, then post anything still missing.
+      relinkAllRecurring();
       processRecurring(); // catch up anything due per the restored schedule
       initUI();
       toast("Data restored successfully.");
@@ -6259,7 +6261,7 @@ function restoreData(event) {
     }
     event.target.value = "";
   };
-  reader.onerror = function () { toast("Could not read file."); };
+  reader.onerror = function () { event.target.value = ""; toast("Could not read file."); };
   reader.readAsText(file);
 }
 
