@@ -4552,6 +4552,15 @@ function renameCategory(type, index, value) {
   // Keep transactions and recurring rules of this type linked to the new name.
   state.transactions.forEach(t => { if (t.type === type && t.category === old) t.category = name; });
   state.recurring.forEach(r => { if (r.type === type && r.category === old) r.category = name; });
+  // Keep planification budgets, import rules, and refund links consistent.
+  state.planification.forEach(p => { if (p.type === type && p.categoryName === old) p.categoryName = name; });
+  (state.importRules || []).forEach(r => {
+    if (r.txType === type && r.setCategory === old) r.setCategory = name;
+    if (type === "expense" && r.setRefundCategory === old) r.setRefundCategory = name;
+  });
+  if (type === "expense") {
+    state.transactions.forEach(t => { if (t.refundCategory === old) t.refundCategory = name; });
+  }
   sortCategories(cats);
   saveState();
   refreshCategoriesUI();
@@ -4593,6 +4602,17 @@ function deleteCategory(type, index) {
     state.transactions.forEach(t => { if (t.type === type && t.category === name) t.category = fallback; });
   }
   state.recurring.forEach(r => { if (r.type === type && r.category === name) r.category = fallback; });
+  // Drop planification budgets for the deleted category (can no longer be re-pointed).
+  state.planification = state.planification.filter(p => !(p.type === type && p.categoryName === name));
+  // Clear import rules that would otherwise silently re-create the deleted category
+  // on the next import, and drop refund links that point at it.
+  (state.importRules || []).forEach(r => {
+    if (r.setCategory === name && (type === "income" ? (r.txType === "income") : (r.txType !== "income"))) r.setCategory = "";
+    if (r.setRefundCategory === name) r.setRefundCategory = "";
+  });
+  if (type === "expense") {
+    state.transactions.forEach(t => { if (t.refundCategory === name) t.refundCategory = ""; });
+  }
   saveState();
   refreshCategoriesUI();
   toast("Category deleted.");
