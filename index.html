@@ -5185,7 +5185,6 @@ function renderUpcomingReview(acctF, todayISO) {
 
 
 /* ---------- Tracking / category dashboard ---------- */
-var _trackAnimId = null;
 function drawTrackChart(canvasId, dayTotals, color) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -5227,6 +5226,7 @@ function drawTrackChart(canvasId, dayTotals, color) {
 
   let progress = 0;
   let hoverIdx = -1;
+  let animId = null;
 
   function draw(prog) {
     ctx.clearRect(0, 0, W, H);
@@ -5335,9 +5335,9 @@ function drawTrackChart(canvasId, dayTotals, color) {
     progress += 0.04;
     if (progress >= 1) { progress = 1; draw(1); return; }
     draw(progress);
-    _trackAnimId = requestAnimationFrame(animate);
+    animId = requestAnimationFrame(animate);
   }
-  if (_trackAnimId) cancelAnimationFrame(_trackAnimId);
+  if (animId) cancelAnimationFrame(animId);
   animate();
 
   fresh.addEventListener('mousemove', e => {
